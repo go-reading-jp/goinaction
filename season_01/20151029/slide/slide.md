@@ -70,3 +70,7 @@ packageはseachディレクトリの下にいるのでsearchになっている�
 
 
 ## Writing generic code using interfaces
+
+# 疑問
+
+* プロジェクトの構成とか、GOPATHってどうしてます？
