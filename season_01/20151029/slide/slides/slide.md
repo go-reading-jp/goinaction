@@ -164,6 +164,12 @@ func execLoop(list []Item) {
 ```
 ---
 
+## feed.go
+
+* search.goのL.14に出てきたRetrieveFeedsの実装を行う
+* data.jsonファイルで定義されているフィードを読み込む
+* フィード毎に異なるMatherを使うかも？
+
 ### Writing generic code using interfaces
 
 
