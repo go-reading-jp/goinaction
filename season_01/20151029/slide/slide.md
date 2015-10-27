@@ -63,12 +63,49 @@ packageはseachディレクトリの下にいるのでsearchになっている�
 
 ### Launching and synchronizing goroutines
 
+#### groutine
+
+* 前回も出てきたので省略
+
 #### channel
 
 * makeで作成し、ゼロで初期化する
 * Channelは参照型で定義され、go rutineで利用される
 * goroutineとのデータの通信に利用される
-* ロックのように利用したり、セマフォとして利用することが出来る
+* オペレータ <- を使って goroutine 間で値の送受信ができる
+* ロックや、セマフォとして利用することで、排他制御や同期化を、簡単な構文で容易に実現できま
+
+[Go by Example: Channel Synchronization](https://gobyexample.com/channel-synchronization)
+```
+package main
+
+import "fmt"
+import "time"
+
+// This is the function we'll run in a goroutine. The
+// `done` channel will be used to notify another
+// goroutine that this function's work is done.
+func worker(done chan bool) {
+    fmt.Print("working...")
+    time.Sleep(time.Second)
+    fmt.Println("done")
+
+    // Send a value to notify that we're done.
+    done <- true
+}
+
+func main() {
+
+    // Start a worker goroutine, giving it the channel to
+    // notify on.
+    done := make(chan bool, 1)
+    go worker(done)
+
+    // Block until we receive a notification from the
+    // worker on the channel.
+    <-done
+}
+```
 
 #### syncパッケージ
 
@@ -96,10 +133,8 @@ func execLoop(list []Item) {
 * [go-study@t9md](https://github.com/t9md/go-study#変数のスコープ)
 
 
-### Launching and synchronizing goroutines
 
-
-## Writing generic code using interfaces
+### Writing generic code using interfaces
 
 # 疑問
 
