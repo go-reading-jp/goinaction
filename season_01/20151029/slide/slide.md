@@ -61,6 +61,36 @@ packageはseachディレクトリの下にいるのでsearchになっている�
 * 関数は複数の値を返すことが出来る
 * 正常の結果とerrorを返すというように使われることが多い
 
+### Launching and synchronizing goroutines
+
+#### channel
+
+* makeで作成し、ゼロで初期化する
+* Channelは参照型で定義され、go rutineで利用される
+* goroutineとのデータの通信に利用される
+* ロックのように利用したり、セマフォとして利用することが出来る
+
+#### syncパッケージ
+
+* 待ち合わせ処理として利用する
+* Add()でカウンタを上げる、Done()でカウンタを下げる、Wait()ではカウンタが0になるまで待つ
+
+```
+import "sync"
+
+func execLoop(list []Item) {
+    var wg sync.WaitGroup
+    for _, item := range list {
+        wg.Add(1)
+        go func(item2 Item) {
+            do_something(item2)
+            wg.Done()
+        }(item)
+    }
+    wg.Wait()
+}
+```
+
 参考
 * [宣言とスコープ@golang.jp](http://golang.jp/go_spec#Declarations_and_scope)
 * [go-study@t9md](https://github.com/t9md/go-study#変数のスコープ)
