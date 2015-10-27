@@ -181,7 +181,8 @@ func execLoop(list []Item) {
 
 ---
 
-```data/data.json
+data/data.json
+```json
 [
 {
 	"site" : "npr",
@@ -197,8 +198,8 @@ func execLoop(list []Item) {
 ```
 
 ---
-
-```search/feed.go
+search/feed.go
+```go
 const dataFile = "data/data.json"
 
 // Feed contains information we need to process a feed.
@@ -236,7 +237,8 @@ func RetrieveFeeds() ([]*Feed, error) {
 
 ### Writing generic code using interfaces
 
-```search/defualt.go
+search/defualt.go
+```go
 package search
 
 // defaultMatcher implements the default matcher.
