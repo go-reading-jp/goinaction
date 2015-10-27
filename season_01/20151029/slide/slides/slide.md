@@ -170,6 +170,19 @@ func execLoop(list []Item) {
 * data.jsonファイルで定義されているフィードを読み込む
 * フィード毎に異なるMatherを使うかも？
 
+### JSONとstructure
+
+* JSONと、structは相性が良い
+* structにタグとして、対応するJSONのフィールド名を定義出来る
+* fileをcloseするときは、deferを使って閉じると関数の終了時にじられる
+* “Decode(v interface{}) error”のお話
+
+適当にサンプルコードを引っ張ってくる
+
+---
+
+## match.go/defualt.go
+
 ### Writing generic code using interfaces
 
 
