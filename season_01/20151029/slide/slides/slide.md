@@ -177,7 +177,58 @@ func execLoop(list []Item) {
 * fileをcloseするときは、deferを使って閉じると関数の終了時にじられる
 * “Decode(v interface{}) error”のお話
 
-適当にサンプルコードを引っ張ってくる
+★JSONのDecodeの話を追記
+
+---
+
+```data/data.json
+[
+{
+	"site" : "npr",
+	"link" : "http://www.npr.org/rss/rss.php?id=1001",
+	"type" : "rss"
+},
+{
+	"site" : "npr",
+	"link" : "http://www.npr.org/rss/rss.php?id=1008",
+	"type" : "rss"
+}
+]
+```
+
+---
+
+```search/feed.go
+const dataFile = "data/data.json"
+
+// Feed contains information we need to process a feed.
+type Feed struct {
+	Name string `json:"site"`
+	URI  string `json:"link"`
+	Type string `json:"type"`
+}
+
+// RetrieveFeeds reads and unmarshals the feed data file.
+func RetrieveFeeds() ([]*Feed, error) {
+	// Open the file.
+	file, err := os.Open(dataFile)
+	if err != nil {
+		return nil, err
+	}
+
+	// Schedule the file to be closed once
+	// the function returns.
+	defer file.Close()
+
+	// Decode the file into a slice of pointers
+	// to Feed values.
+	var feeds []*Feed
+	err = json.NewDecoder(file).Decode(&feeds)
+
+	// We don't need to check for errors, the caller can do this.
+	return feeds, err
+}
+```
 
 ---
 
@@ -185,8 +236,23 @@ func execLoop(list []Item) {
 
 ### Writing generic code using interfaces
 
+```search/defualt.go
+package search
 
+// defaultMatcher implements the default matcher.
+type defaultMatcher struct{}
 
+// init registers the default matcher with the program.
+func init() {
+	var matcher defaultMatcher
+	Register("default", matcher)
+}
+
+// Search implements the behavior for the default matcher.
+func (m defaultMatcher) Search(feed *Feed, searchTerm string) ([]*Result, error) {
+	return nil, nil
+}
+```
 
 
 
