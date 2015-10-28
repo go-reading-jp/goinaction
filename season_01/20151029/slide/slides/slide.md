@@ -289,7 +289,7 @@ func matchOS(any interface{}) bool {
 
 ---
 
-### Chapther2のソースコード
+### ソースコード
 
 #### Interfaceの定義
 
