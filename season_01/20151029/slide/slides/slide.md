@@ -237,18 +237,34 @@ func RetrieveFeeds() ([]*Feed, error) {
 
 ### Writing generic code using interfaces
 
+* インタフェース型の宣言時に指定したメソッドリストのメソッドをすべて実装することで，インタフェースを実装することができ
+* 慣習的にInterface型を定義するときはerを末尾につける    
+fmt.Stringer
+* interface{}型は，メソッドリストがないインタフェース型の型リテラル      
+interface{}型の変数や引数には，どんな型の値でも代入したり，渡したりすることができる
+
+#### interfaceの定義の仕方
+```go
+type <型名> interface {
+    メソッド名(引数の型, ...) (返り値の型, ...)
+    ・
+    ・
+}
+```
+
+#### 参考資料
+* [Go の interface 設計](http://jxck.hatenablog.com/entry/20130325/1364251563)
+* [実践Go](http://golang.jp/effective_go#interfaces)
+
+
+---
+
+### ソースコード
 search/defualt.go
 ```go
 package search
 
-// defaultMatcher implements the default matcher.
-type defaultMatcher struct{}
-
-// init registers the default matcher with the program.
-func init() {
-	var matcher defaultMatcher
-	Register("default", matcher)
-}
+// 省略
 
 // Search implements the behavior for the default matcher.
 func (m defaultMatcher) Search(feed *Feed, searchTerm string) ([]*Result, error) {
