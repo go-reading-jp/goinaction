@@ -271,17 +271,22 @@ type Matcher interface {
 }
 ```
 #### Interfaceの実装と利用
+
+Searchメソッドを実装しているため、Matcherインターフェイスを実装していると言える。
 search/defualt.go
 ```go
-package search
-
 // 省略
 
 // Search implements the behavior for the default matcher.
 func (m defaultMatcher) Search(feed *Feed, searchTerm string) ([]*Result, error) {
 	return nil, nil
 }
+```
 
+Matchメソッドでは、MatcherのSearchメソッドを実装していれば<<あとで書く＞＞
+http://dev.classmethod.jp/go/golang-6/　を参考に
+
+```go
 // Match is launched as a goroutine for each individual feed to run
 // searches concurrently.
 func Match(matcher Matcher, feed *Feed, searchTerm string, results chan<- *Result) {
@@ -302,6 +307,7 @@ func Match(matcher Matcher, feed *Feed, searchTerm string, results chan<- *Resul
 
 ---
 
+P３４まで書いた
 
 
 # 疑問
