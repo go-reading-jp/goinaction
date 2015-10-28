@@ -260,6 +260,17 @@ type <型名> interface {
 ---
 
 ### ソースコード
+
+#### Interfaceの定義
+search/match.go
+```go
+// Matcher defines the behavior required by types that want
+// to implement a new search type.
+type Matcher interface {
+	Search(feed *Feed, searchTerm string) ([]*Result, error)
+}
+```
+#### Interfaceの実装と利用
 search/defualt.go
 ```go
 package search
@@ -270,7 +281,26 @@ package search
 func (m defaultMatcher) Search(feed *Feed, searchTerm string) ([]*Result, error) {
 	return nil, nil
 }
+
+// Match is launched as a goroutine for each individual feed to run
+// searches concurrently.
+func Match(matcher Matcher, feed *Feed, searchTerm string, results chan<- *Result) {
+	// Perform the search against the specified matcher.
+	searchResults, err := matcher.Search(feed, searchTerm)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	// Write the results to the channel.
+	for _, result := range searchResults {
+		results <- result
+	}
+}
+
 ```
+
+---
 
 
 
