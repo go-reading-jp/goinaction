@@ -178,6 +178,11 @@ func execLoop(list []Item) {
 * “Decode(v interface{}) error”なので、引数は空インターフェースなのでgoの型型ならなんでも引数に渡せる。
  実際は6つのデコーダの中で型アサーションにより適切なものが使われる。
 
+#### 参考
+
+* [JSON and Go](http://blog.golang.org/json-and-go)
+* [JSONパッケージ](http://golang.jp/pkg/json)
+
 ---
 
 data/data.json
@@ -258,7 +263,33 @@ type <型名> interface {
 
 ---
 
-### ソースコード
+#### 型アサーションの例
+
+引数として受け取ったインターフェース型がstringの配列型であればそのままenvsに代入、string型であればstringの配列型に変換してenvsに代入している。
+
+https://github.com/mattn/gom/blob/master/gomfile.go
+```go
+func matchOS(any interface{}) bool {
+    var envs []string
+    if as, ok := any.([]string); ok {
+        envs = as
+    } else if s, ok := any.(string); ok {
+        envs = []string{s}
+    } else {
+        return false
+    }
+ 
+    if has(envs, runtime.GOOS) {
+        return true
+    }
+    return false
+}
+```
+
+
+---
+
+### Chapther2のソースコード
 
 #### Interfaceの定義
 
@@ -294,7 +325,7 @@ func (m defaultMatcher) Search(feed *Feed, searchTerm string) ([]*Result, error)
 	return nil, nil
 }
 ```
-
+---
 MatchメソッドではMatcherインターフェースを引数として受け取っているため、処理を変更することができる。
 
 ```go
