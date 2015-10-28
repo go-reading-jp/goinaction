@@ -255,7 +255,7 @@ type <型名> interface {
 #### 参考資料
 * [Go の interface 設計](http://jxck.hatenablog.com/entry/20130325/1364251563)
 * [実践Go](http://golang.jp/effective_go#interfaces)
-
+* [How to use interfaces in Go](http://jordanorelli.com/post/32665860244/how-to-use-interfaces-in-go)
 
 ---
 
