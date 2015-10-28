@@ -168,16 +168,15 @@ func execLoop(list []Item) {
 
 * search.goのL.14に出てきたRetrieveFeedsの実装を行う
 * data.jsonファイルで定義されているフィードを読み込む
-* フィード毎に異なるMatherを使うかも？
+* フィードの種類ごとに異なるMatheが使える
 
 ### JSONとstructure
 
 * JSONと、structは相性が良い
 * structにタグとして、対応するJSONのフィールド名を定義出来る
 * fileをcloseするときは、deferを使って閉じると関数の終了時にじられる
-* “Decode(v interface{}) error”のお話
-
-★JSONのDecodeの話を追記
+* “Decode(v interface{}) error”なので、引数は空インターフェースなのでgoの型型ならなんでも引数に渡せる。
+ 実際は6つのデコーダの中で型アサーションにより適切なものが使われる。
 
 ---
 
@@ -239,7 +238,7 @@ func RetrieveFeeds() ([]*Feed, error) {
 
 * インタフェース型の宣言時に指定したメソッドリストのメソッドをすべて実装することで，インタフェースを実装することができ
 * 慣習的にInterface型を定義するときはerを末尾につける    
-fmt.Stringer
+fmt.Stringer、io.Reader
 * interface{}型は，メソッドリストがないインタフェース型の型リテラル      
 interface{}型の変数や引数には，どんな型の値でも代入したり，渡したりすることができる
 
@@ -262,6 +261,9 @@ type <型名> interface {
 ### ソースコード
 
 #### Interfaceの定義
+
+Matcherのインターフェースを定義する。
+
 search/match.go
 ```go
 // Matcher defines the behavior required by types that want
@@ -273,9 +275,19 @@ type Matcher interface {
 #### Interfaceの実装と利用
 
 Searchメソッドを実装しているため、Matcherインターフェイスを実装していると言える。
+
 search/defualt.go
 ```go
 // 省略
+
+// defaultMatcher implements the default matcher.
+type defaultMatcher struct{}
+
+// init registers the default matcher with the program.
+func init() {
+	var matcher defaultMatcher
+	Register("default", matcher)
+}
 
 // Search implements the behavior for the default matcher.
 func (m defaultMatcher) Search(feed *Feed, searchTerm string) ([]*Result, error) {
@@ -283,8 +295,7 @@ func (m defaultMatcher) Search(feed *Feed, searchTerm string) ([]*Result, error)
 }
 ```
 
-Matchメソッドでは、MatcherのSearchメソッドを実装していれば<<あとで書く＞＞
-http://dev.classmethod.jp/go/golang-6/　を参考に
+MatchメソッドではMatcherインターフェースを引数として受け取っているため、処理を変更することができる。
 
 ```go
 // Match is launched as a goroutine for each individual feed to run
@@ -307,7 +318,6 @@ func Match(matcher Matcher, feed *Feed, searchTerm string, results chan<- *Resul
 
 ---
 
-P３４まで書いた
 
 
 # 疑問
