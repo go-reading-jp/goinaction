@@ -242,7 +242,7 @@ func RetrieveFeeds() ([]*Feed, error) {
 ### Writing generic code using interfaces
 
 * インタフェース型の宣言時に指定したメソッドリストのメソッドをすべて実装することで，インタフェースを実装することができ
-* 慣習的にInterface型を定義するときはerを末尾につける    
+* 慣習的にInterface型を定義するとにメソッドが１つだけの場合はerを末尾につける    
 fmt.Stringer、io.Reader
 * interface{}型は，メソッドリストがないインタフェース型の型リテラル      
 interface{}型の変数や引数には，どんな型の値でも代入したり，渡したりすることができる
@@ -346,11 +346,3 @@ func Match(matcher Matcher, feed *Feed, searchTerm string, results chan<- *Resul
 }
 
 ```
-
----
-
-
-
-# 疑問
-
-* プロジェクトの構成とか、GOPATHってどうしてます？
